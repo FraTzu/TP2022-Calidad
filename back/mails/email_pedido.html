@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="estilos.css" />
+    <title>Email de Compra</title>
+  </head>
+  <body>
+    <div id="factura">
+      <div>
+        <table class="tabla-general">
+          <caption></caption>
+          <th id="presentacion" colspan = "2">
+            
+            <div id= "logo" style="color: #127c5f; font-size: 80px !important;">
+              <strong>Naly</strong>
+             </div>
+                
+            <tr>
+              <td colspan = "2">¡Finaliza tu Compra!</td>
+            </tr>
+            <tr>
+              <td colspan = "2">Hola <%= orden.cliente.nombres; %>, tienes un pago pendiente. Sigue las instruccciones de pago y realizalo en las próximas 24 horas. Pasada las 24 horas, tu pedido será cancelado automaticamente.</td>
+            </tr>
+            <tr>
+                <tr>
+                <td >Número de Pedido</td>
+                <td><a  style="color: #127c5f  !important;" href="http://localhost:4200/cuenta/pedidos/<%= orden._id; %>" > Ver mi Pedido</a></td>
+            </tr>
+                <td> <%= orden._id; %></td>
+            
+            </tr>
+            <tr>
+                <tr>
+                <td>Cliente</td>
+                <td><a  style="color: #127c5f  !important;" href="http://localhost:4200/" > Visitar Tienda Online</a></td>
+            </tr>
+                <td> <%= orden.cliente.nombres; %> <%= orden.cliente.apellidos; %></td>
+                
+            </tr>
+            
+            
+          </th> 
+          
+        </table>
+        <hr>
+        
+      </div>
+      <div>
+        <table class = "tabla-content">
+            <caption></caption>
+            <th id="compra" colspan = "3">
+                  Información de la Compra
+              <hr>
+              <tr>
+                  <tr>
+                  <td>Producto</td>
+                  <td>Cantidad</td>
+                  <td>Precio</td>
+                  </tr>
+              </tr>
+              <% for(var i=0; i < dventa.length; i++) { %>
+              <tr>
+                  <tr>
+                  <td><%= dventa[i].producto.titulo%></td>
+                  <td> <%= dventa[i].cantidad%></td>
+                  <td> <%= dventa[i].subtotal %> <%= orden.currency%> </td>
+                  </tr>
+              </tr>
+              <% } %>
+                
+              
+            </th> 
+
+        </table>
+
+      </div>
+      <div>
+        <table class = "tabla-pagos">
+            <caption></caption>
+            <th id="pago" colspan = "5">
+                  Información de Pago
+              <hr>
+              <tr>
+                  <td>Método de Pago:</td>
+                  <td>Subtotal:</td>
+                  <td>Envio:</td>
+                  <td>Descuento:</td>
+                  <td>Total:</td>
+                  
+              </tr>
+             
+              <tr>
+                  <tr>
+                  <td> <%= orden.metodo_pago %> </td>
+                  <td> <%= orden.subtotal %> <small style="font-size: 12px !important;"><%= orden.currency%></small></td>
+                  <td>  <%= orden.envio_precio%> <small style="font-size: 12px !important;"><%= orden.currency%></small> </td>
+                  <td> <%= orden.valor_descuento%> <small style="font-size: 12px !important;"><%= orden.currency%></small> </td>
+                  <td> <%= (orden.total_pagar)%> <small style="font-size: 12px !important;"><%= orden.currency%></small></td>
+                  </tr>
+              </tr>
+              <tr>
+                <tr>
+                <td colspan = "5">
+                    <singleline>
+                        <div mc:edit data-text-edit>
+                         <strong> Instrucciones de pago:</strong>
+                        </div>
+                      </singleline>
+                </td>
+                </tr>
+                <tr>
+                <td colspan = "5">
+                    <singleline>
+                        <div mc:edit data-text-edit>
+                            Realiza el pago de tu pedido por Transferencia o Depósito y envianos una imagen de la operación a nuestro número de WhatsApp 966351229 para confirmar tu compra y agendar el envio de tu pedido.
+                            <br>
+                            *Si te encuentras fuera de Lima y deseas realizar el pago vía deposito, no olvides agregar S/7.50 de comisión bancaria al monto total de tu compra.
+                        </div>
+                      </singleline>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "5">
+                    <div mc:edit data-text-edit>
+                    <strong>Datos del pago:<strong>
+                      </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "5">
+                    <singleline>
+                        <div mc:edit data-text-edit>
+                          <strong>Nro de cuenta Soles:</strong> 878-654619584654-3<br>
+                          <strong>Código Interbancario:</strong> 002-13245674987414654<br>
+                          <strong>Títular:</strong> NALY.<br>
+                          <strong>RUC:</strong> 20000000001<br>
+                        </div>
+                      </singleline>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "5">
+                
+                   <singleline>
+                        <div style="color: #127c5f ;">
+                         <strong>¿Sabes cómo mantenerte al tanto de todos los detalles de tus pedidos, direcciones y reseñas en cualquier momento?</strong>
+                        </div>
+                    </singleline>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "5">
+                    <singleline>
+                        <div style="color: #127c5f ;">
+                            <strong>  Ingresa a <a href="http://localhost:4200/" target="_blank" rel="noopener">www.NalyTienda.com</a>, Iniciar sesión, dale click a "Mi cuenta" y listo.</strong>
+                        </div>
+                      </singleline>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "5">
+                    <singleline>
+                        <div  style="color: #127c5f";>
+                          Si tienes alguna pregunta solo responde a este correo electrónico o contactanos a traves de <span style="color: #127c5f ;">nalyContacto@gmail.com</span>
+                        </div>
+                      </singleline>
+                </td>
+            </tr>
+            </tr>
+             
+                
+              
+            </th> 
+
+        </table>
+      </div>
+    </div> 
+  </body>
+</html>

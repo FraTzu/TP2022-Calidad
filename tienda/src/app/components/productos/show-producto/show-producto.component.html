@@ -1,0 +1,344 @@
+<app-nav></app-nav>
+
+<main class="cs-page-wrapper">
+    <nav class="bg-secondary mb-3" aria-label="breadcrumb">
+        <div class="container">
+          <ol class="breadcrumb breadcrumb-alt mb-0">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/']" ><i class="cxi-home" aria-hidden="true"></i></a>
+            </li>
+            <li class="breadcrumb-item">
+              <a *ngIf="producto.categoria" [routerLink]="['/productos/categoria',producto.categoria.toLowerCase()]" routerLinkActive="router-link-active" >{{producto.categoria}}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{producto.titulo}}</li>
+          </ol>
+        </div>
+      </nav>
+
+      <section class="container d-md-flex align-items-center justify-content-between py-3 py-md-4 mb-3">
+        <h1 class="mb-2 mb-md-0">{{producto.titulo}}</h1>
+        <span class="text-muted" *ngIf="producto._id"><strong>Art. No.</strong>{{producto._id.toUpperCase()}}</span>
+      </section>
+
+      <!-- Single product -->
+      <section class="container py-md-6 py-5 mb-2">
+        <div class="row">
+          <div class="col-md-6 mb-md-0 mb-4">
+
+            <!-- Product gallery -->
+            <div class="cs-carousel cs-gallery cs-product-gallery mx-auto" style="max-width: 570px;">
+              <div class="cs-carousel-inner" data-carousel-options=''>
+    
+                <!-- Product gallery item -->
+                <a class="cs-gallery-item" *ngFor="let item of producto.galeria; let indice = index" href="{{url +'obtener_portada/'+item.imagen}}" data-sub-html='<h6 class="text-light">Gallery image caption #1</h6>'>
+                  <img class="rounded" [src]="url +'obtener_portada/'+item.imagen" alt="Carousel image">
+                  <span class="cs-gallery-caption">Imagen #{{indice+1}}</span>
+                </a>
+              </div>
+    
+              <!-- Product gallery thumbnails -->
+              <div class="cs-thumbnails" id="cs-thumbnails">
+                <button type="button" *ngFor="let item of producto.galeria; let indice = index" [attr.data-nav]="indice">
+                  <img [src]="url +'obtener_portada/'+item.imagen" alt="Thumbnail">
+                </button>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="col-md-6 pl-xl-5">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <!-- Price -->
+              <div class="d-flex align-items-center mb-sm-0 mb-4">
+                <span class="h3 d-inline-block mb-0 text-danger">S/.{{producto.precio}}</span>
+              </div>
+              
+
+            </div>
+
+            <!-- Ordering form -->
+            <form class="row">
+
+              <div class="col-sm-8 order-sm-3 order-3 mt-3">
+                <div class="form-group">
+                  <label for="size">{{producto.titulo_variedad}}</label>
+                  <select class="form-control custom-select" id="size" name="variedad" [(ngModel)]="select_variedad_lbl" (change)="select_variedad()">
+                    <option value="" selected disabled >Seleccionar</option>
+                    <ng-container *ngFor="let item of variedades">
+                      <option value="{{item._id}}_{{item.valor}}_{{item.stock}}" *ngIf="item.stock>= 1">{{item.valor}}</option>
+                      <option value="" *ngIf="item.stock == 0" disabled>{{item.valor}} (Sin stock)</option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div>
+            
+              <div class="col-sm-2 col-4 order-sm-4 order-4 mt-3">
+                <div class="form-group">
+                  <label for="cantidad">Cantidad</label>
+                  <input type="text" class="form-control"  placeholder="Cantidad" name="cantidad"  [(ngModel)]="carrito_data.cantidad"/>
+                </div>
+              </div>
+
+              <div class="col-lg-6 order-lg-1 order-1">
+                <ng-container *ngIf="user_lc != undefined">
+                  <button *ngIf="!btn_cart" class="btn btn-block btn-primary" (click)="agregar_producto()">
+                    <i class="cxi-cart mr-2" aria-hidden="true"></i>
+                    Añadir al Carrito
+                  </button>
+                  <button *ngIf="btn_cart" type="button" class="btn btn-primary" disabled>
+                    <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+                    Agregando...
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="user_lc == undefined">
+                  <button *ngIf="!btn_cart" class="btn btn-block btn-primary" (click)="agregar_producto_guest()">
+                    <i class="cxi-cart mr-2" aria-hidden="true"></i>
+                    Añadir al Carrito
+                  </button>
+                </ng-container>
+              </div>
+
+              <div class="col-lg-4 order-lg-2 order-2 text-sm-right">
+                <a href="#modal-sizing" data-toggle="modal" class="d-inline-block mt-sm-4 mb-sm-0 mb-4 pt-sm-3 font-weight-bold text-decoration-0 text-dark">
+                  <i class="cxi-hanger mr-2"></i>
+                  Size chart
+                </a>
+              </div>
+
+            </form>
+
+
+            <!-- Terms -->
+            <!-- Accordion made of cards -->
+            <div class="accordion-alt mb-4" id="productTerms">
+              <!-- Card -->
+              <div class="card border-bottom">
+                <div class="card-header" id="delivery-card">
+                  <h6 class="accordion-heading">
+                    <a href="#delivery" class="" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="delivery">Delivery
+                      <span class="accordion-indicator"></span>
+                    </a>
+                  </h6>
+                </div>
+                <div class="collapse show" id="delivery" aria-labelledby="delivery-card" data-parent="#productTerms" style="">
+                  <div class="card-body">
+
+                    <!-- Delivery table -->
+                    <div class="table-responsive px-md-3">
+                      <table class="table mb-0" style="min-width: 450px;">
+                        <thead class="font-size-xs text-uppercase text-muted">
+                          <tr>
+                            <th class="border-0 font-weight-normal">Tipo</th>
+                            <th class="border-0 font-weight-normal">Tiempo Aproximado de Entrega</th>
+                            <th class="border-0 font-weight-normal">Precio</th>
+                          </tr>
+                        </thead>
+                        <tbody class="font-size-sm">
+                          <tr>
+                            <th class="font-weight-normal">Delivery Lima</th>
+                            <td>1-4 días laborables</td>
+                            <td>S/. 10</td>
+                          </tr>
+                          <tr>
+                            <th class="font-weight-normal">Delivery Fuera de Lima</th>
+                            <td>5-7 días laborables</td>
+                            <td>S/. 15</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Card -->
+            </div>
+
+            <!-- Payment -->
+            <div class="pb-3 text-nowrap" data-simplebar data-simplebar-auto-hide="false">
+              <a  class="d-inline-block mb-3 mr-xl-4 mr-3">
+                <img src="assets/img/visa.jpg" alt="Visa" class="border rounded">
+              </a>
+              <a  class="d-inline-block mb-3 mr-xl-4 mr-3">
+                <img src="assets/img/master-card.jpg" alt="Mastercard" class="border rounded">
+              </a>
+              <a  class="d-inline-block mb-3">
+                <img src="assets/img/pay-pal.jpg" alt="PayPal" class="border rounded">
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="py-5" style="background-color: #e5e8ed;">
+        <section  class="container my-lg-2 py-2 py-md-4" >
+          <div class="row">
+            <div class="col-lg-7 col-md-8 mb-md-0 mb-4" [innerHTML]="producto.contenido">
+              
+            </div>
+            <div class="col-md-4 offset-lg-1">
+  
+              <!-- Product card carousel -->
+              <div class="card card-product">
+                <div class="card-product-img">
+                  <div class="cs-carousel cs-controls-onhover">
+                    <a class="">
+                      <div>
+                        <img class="card-img-top" [src]="url +'obtener_portada/'+producto.portada" alt="Product image">
+                    </div>
+                     
+                    </a>
+                  </div>
+                  <div class="card-product-widgets-top">
+                    <div class="ml-auto star-rating">
+                      <i class="sr-star cxi-star-filled active" aria-hidden="true"></i>
+                      <i class="sr-star cxi-star-filled active" aria-hidden="true"></i>
+                      <i class="sr-star cxi-star-filled active" aria-hidden="true"></i>
+                      <i class="sr-star cxi-star-filled active" aria-hidden="true"></i>
+                      <i class="sr-star cxi-star" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="card-product-widgets-bottom">
+                    <a class="btn-wishlist ml-auto" href="#" data-toggle="tooltip" data-placement="left" title="Add to wishlist"></a>
+                  </div>
+                </div>
+                <div class="card-body pb-2" style="background-color: white;">
+                  <h3 class="card-product-title text-truncate mb-2">
+                    <a href="#" class="nav-link">{{producto.titulo}}</a>
+                  </h3>
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="h5 d-inline-block text-danger mb-0">S/.{{producto.precio}}</span>
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      <div class="ps-product__content ps-tab-root">
+            <div class="container">
+              <div class="ps-tabs">
+                <div class="ps-tab" [ngClass]="{'active': option_nav == 3}">
+                  <div class="ps-product__review">
+                    <h4>{{reviews.length}} reseñas para {{producto.titulo}}</h4>
+                    <ng-container *ngIf="reviews.length >= 1">
+                      <div class="ps-block--comment ps-block--comment-review" *ngFor="let item of reviews | slice: (page-1)*pageSize : (page-1) * pageSize + pageSize">
+                        <div class="ps-block__content">
+                          <div *ngIf="item.estrellas ==1">
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                          </div>
+                          <div *ngIf="item.estrellas == 2">
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                          </div>
+                          <div *ngIf="item.estrellas == 3">
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                          </div>
+                          <div *ngIf="item.estrellas == 4">
+                           
+             
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" active style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star"  aria-hidden="true" style="color:#ccc!important"></i></span>
+                          </div>
+                          <div *ngIf="item.estrellas == 5">
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                            <span><i class="sr-star cxi-star-filled"  aria-hidden="true" style="color:#f1ee51!important"></i></span>
+                          </div>
+                          <h5>{{item.cliente.nombres}} {{item.cliente.apellidos}} <span> {{item.createdAt|date}}</span></h5>
+                          <p>{{item.review}}</p>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="reviews.length == 0">
+                      <div class="row">
+                        <div class="col-sm-8 col-md-5 text-center mb-md-0 mb-4 pb-md-0 pb-3 mx-auto">
+                          <h3 class=" mb-2 text-muted">Producto aún sin reseñas</h3>
+                        </div>
+                      </div>
+                    </ng-container>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+
+     
+      <div class="modal fade" id="modal-sizing" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+          <div class="modal-content border-0">
+            <div class="modal-header border-0 pb-0 px-md-5 px-4 d-block position-relative">
+              <h3 class="modal-title mt-4 mb-0 text-center">Guía de Tallas</h3>
+              <button type="button" class="close position-absolute" style="top: 1.5rem; right: 1.5rem;" data-dismiss="modal" aria-label="Close">
+                <i class="cxi-cross" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="modal-body px-md-5 px-4">
+              <div class="table-responsive border rounded">
+                <h4 class="mb-0 py-3 font-size-lg text-center">Medidas Según Tallas</h4>
+                <table class="table table-striped mb-0">
+                  <caption></caption>
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="font-weight-bold">Talla(CM)</th>
+                      <td>BUSTO</td>
+                      <td>CADERA</td>
+                      <td>CINTURA</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="font-weight-normal">34 - XS</th>
+                      <td>80 </td>
+                      <td>86 - 88</td>
+                      <td>60-62</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="font-weight-normal">36 - S</th>
+                      <td>85</td>
+                      <td>89 - 92</td>
+                      <td>36 - 66</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="font-weight-normal">40 - M</th>
+                      <td>95</td>
+                      <td>97 - 100</td>
+                      <td>71 - 74</td>
+                    <tr>
+                      <th scope="row" class="font-weight-normal">44 - L</th>
+                      <td>105</td>
+                      <td>105 - 108</td>
+                      <td>79 - 82</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="font-weight-normal">48 - XL</th>
+                      <td>115</td>
+                      <td>113 - 116</td>
+                      <td>87 - 90</td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</main>

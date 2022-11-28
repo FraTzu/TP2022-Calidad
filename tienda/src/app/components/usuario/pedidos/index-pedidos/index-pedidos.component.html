@@ -1,0 +1,104 @@
+<app-nav></app-nav>
+
+<main class="cs-page-wrapper">
+  <!-- Breadcrumb -->
+  <nav class="bg-secondary mb-3" aria-label="breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb breadcrumb-alt mb-0">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/']"><i class="cxi-home" aria-hidden="true"></i></a>
+        </li>
+
+        <li class="breadcrumb-item active" aria-current="page">Mis Ordenes</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Page container -->
+  <section class="container pt-3 pt-lg-4 pb-5 pb-lg-6">
+    <div class="row pb-2 pb-lg-0">
+      <!-- Account menu (sticky sidebar) -->
+      <aside class="col-xl-3 col-lg-4 pb-3 mb-4 mb-lg-0">
+        <app-siderbar></app-siderbar>
+      </aside>
+
+      <div class="col align-item-center mb-4 pb-1 pb-sm-3">
+        <div class="row justify-content-center">
+          <h1 class="h1">Mi Cuenta</h1>
+        </div>
+        <div class="col ml-auto">
+          <div class="d-flex align-items-center justify-content-between mb-4 pb-sm-2">
+            <h1 class="h2 mb-0">Mis ordenes</h1>
+
+          </div>
+
+          <!-- Orders accordion -->
+          <div class="accordion-alt" *ngIf="!load_data" id="orders">
+            <!-- Order -->
+
+              <div class="card border-bottom" >
+                <div class="card-header accordion-heading py-1">
+
+
+                  <table class="table table-bordered">
+                    <caption></caption>
+                    <thead class="thead-dark">
+                      <tr>
+                        <th id="n">Nro de orden</th>
+                        <th id="f">Fecha</th>
+                        <th id="e">Estado</th>
+                        <th id="m">Monto</th>
+                        <th id="b">Boleta</th>
+                      </tr>
+                    </thead>
+                    <ng-container *ngIf="!load_data">
+                      <tbody *ngFor="let item of ordenes | slice: (page-1)*pageSize : (page-1) * pageSize + pageSize;">
+                        <tr>
+                        <td><a [routerLink]="['/cuenta/pedidos',item._id]"class="d-flex flex-wrap justify-content-between py-3" data-toggle="collapse" aria-expanded="false">
+                          <span class="pr-2"># {{ item._id.toUpperCase() }}</span></a></td>
+                        <td><span class="font-size-sm text-muted text-nowrap px-2">
+                          <i class="cxi-clock font-size-base align-middle mt-n1 mr-1" aria-hidden="true"></i>
+                          {{ item.createdAt | date }}
+                        </span></td>
+                        <td><span class="badge badge-info">{{ item.estado }}</span></td>
+                        <td> <span class="text-dark pl-1">S/.{{ item.total_pagar }}</span></td>
+                        <td *ngIf="item.estado=='Finalizado'"><a [routerLink]="['verBoleta',item._id]">Boleta </a></td>
+                       </tr>
+                      </tbody>
+                    </ng-container>
+                  </table>
+
+
+                </div>
+              </div>
+
+
+            <ng-container *ngIf="ordenes.length == 0">
+              <div class="card border-bottom">
+                <div class="card-header accordion-heading py-1">
+                  <a class="d-flex flex-wrap justify-content-between py-3">
+                    <span class="text-muted">Usted no se encuentra con pedidos actualmente</span>
+                  </a>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+
+          <div class="row">
+            <div class="col text-center" *ngIf="load_data">
+              <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+              </div>
+            </div>
+          </div>
+
+          <ngb-pagination
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="ordenes.length"
+          ></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
