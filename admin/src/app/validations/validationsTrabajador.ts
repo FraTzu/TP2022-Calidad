@@ -3,18 +3,31 @@ import { MessageBox } from '../utils/MessageBox';
 export class ValidatonsTrabajador {
     static verificarTrabajador(form: any, userRol: any) {
         let numerico = /^\d+$/;
+        let letras = /^[aA-zZ\s]+$/;
         let escontraseña=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%?&])[A-Za-z\d$@$!%?&]{8,15}/;
         
         if(!this.validarObligatorios(form)){return false;}
       
-        if(form.nombres.match(numerico)) {
-            MessageBox.messageError('El campo nombres debe ser alfabetico');
+        if(!form.nombres.match(letras)) {
+            MessageBox.messageError('El campo nombres debe ser solo letras');
             return false;
         }
+
+        if(!form.apellidos.match(letras)) {
+            MessageBox.messageError('El campo apellidos debe ser solo letras');
+            return false;
+        }
+
         if(form.telefono && !form.telefono.match(numerico)) {
             MessageBox.messageError('El campo telefono debe ser numerico');
             return false;
         }
+
+        if(form.telefono.length != 9) {
+            MessageBox.messageError('El campo telefono debe ser de 9 digitos');
+            return false;
+        }
+
         if(!form.numeroDocumento.match(numerico)) {
             MessageBox.messageError('El campo Número de Documento debe ser numérico');
             return false;
@@ -46,11 +59,11 @@ export class ValidatonsTrabajador {
     }
 
     private static validarObligatorios(form: any) {
-        if(!form.nombres) {
+        if(!form.nombres || form.nombres.trim() == "") {
             MessageBox.messageError('El campo nombres es obligatorio');
             return false;
         }
-        if(!form.apellidos) {
+        if(!form.apellidos || form.apellidos.trim() == "") {
             MessageBox.messageError('El campo apellidos es obligatorio');
             return false;
           }

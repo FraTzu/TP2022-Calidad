@@ -578,6 +578,7 @@ const cambiar_contrasenia = async function(req, res) {
 
     buscar_correo.then(
         cliente => {
+            if(!cliente) {return res.status(200).send({message: 'No se encontró el correo'});}
             bcrypt.hash(password,null,null, async function(err,hash){
                 let reg = Promise.resolve(Cliente.findByIdAndUpdate({_id: cliente._id},{
                     password: hash,

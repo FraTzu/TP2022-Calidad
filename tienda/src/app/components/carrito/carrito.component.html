@@ -153,10 +153,44 @@
                       </div>  
                       <div class="collapse" id="cash-card" data-parent="#payment-methods">
                         <div class="card-body pt-3 pb-0">
-                          <p class="mb-2 text-muted">+51 966 351 229</p>
-                          <img src="assets/img/YAPE_PAGO.jpg" width="300" alt="YAPE">
+                          <div class="row">
+                            <div class="col-6">
+                              <a class="btn btn-primary text-white mr-3" style="cursor: pointer;" data-toggle="modal" [attr.data-target]="'#yape'">Yape</a>
+                            </div>
+                            <div class="col-6">
+                              <a class="btn btn-primary text-white mr-3" style="cursor: pointer;" data-toggle="modal" [attr.data-target]="'#plin'">Plin</a>
+                            </div>
+                          </div>
+                          <div class="modal fade" id="yape" tabindex="-1" style="display: none;" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="text-center">YAPE</h1>
+                                  <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                  <p class="mb-2 text-muted">+51 966 351 229</p>
+                                  <img src="assets/img/YAPE_PAGO.jpg" width="300" alt="YAPE">
+                                </div>
+                              </div>
+                              </div>
+                          </div>
+                          <div class="modal fade" id="plin" tabindex="-1" style="display: none;" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="text-center">PLIN</h1>
+                                  <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                  <p class="mb-2 text-muted">+51 966 351 229</p>
+                                  <img src="assets/img/PLIN_PAGO.jpg" width="300" alt="YAPE">
+                                </div>
+                              </div>
+                              </div>
+                          </div>
                         </div>
-                      </div>
+                      </div> 
                   </div>
                 </div>
 

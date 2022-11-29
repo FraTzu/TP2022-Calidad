@@ -5,6 +5,7 @@ import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import { MessageBox } from 'src/app/utils/MessageBox';
 import { AdminService } from '../../../services/admin.service';
+import { ValidationsInventario } from '../../../validations/validationsInventario';
 
 declare let $:any;
 
@@ -86,6 +87,7 @@ export class InventarioProductoComponent implements OnInit {
 
   //registra el inventario con el formato del inventari y lo valida
   registro_inventario(inventarioForm){
+    if(!ValidationsInventario.validarInventario(inventarioForm.value)){return;}
     let data = {
       producto: this.producto._id,
       cantidad: inventarioForm.value.cantidad,

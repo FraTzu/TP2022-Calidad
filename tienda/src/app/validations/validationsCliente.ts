@@ -31,6 +31,7 @@ export class ValidatonsCliente {
     static obligatoriosActualizar (form:any) {
         const fecha = new Date(form.f_nacimiento);
         const timeDiff = Math.abs(Date.now() - fecha.getTime());
+        
         if(!form.nombres) {
             MessageBox.messageError('El campo nombres es obligatorio');
             return false;
@@ -38,6 +39,11 @@ export class ValidatonsCliente {
 
         if(form.tipoDocumento == ""){
             MessageBox.messageError('Debe seleccionar un tipo de documento');
+            return false;
+        }
+
+        if(form.tipoDocumento && !form.numeroDocumento){
+            MessageBox.messageError('El campo numero de documento es obligatorio');
             return false;
         }
        
