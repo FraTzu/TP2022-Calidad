@@ -3,6 +3,7 @@ import { MessageBox } from '../utils/MessageBox';
 export class ValidatonsCliente {
     static verificarCliente(form: any) {
         let numerico = /^\d+$/;
+        let letras = /^[aA-zZ\s]+$/;
         
         if(!form.nombres) {
             MessageBox.messageError('El campo nombres es obligatorio');
@@ -16,6 +17,17 @@ export class ValidatonsCliente {
           MessageBox.messageError('El campo apellidos es obligatorio');
           return false;
         }
+
+        if(!form.nombres.match(letras)) {
+          MessageBox.messageError('El campo nombres debe ser solo letras');
+          return false;
+        }
+
+        if(!form.apellidos.match(letras)) {
+            MessageBox.messageError('El campo apellidos debe ser solo letras');
+            return false;
+        }
+        
         if(!form.email) {
           MessageBox.messageError('El campo correo electronico es obligatorio');
           return false;
