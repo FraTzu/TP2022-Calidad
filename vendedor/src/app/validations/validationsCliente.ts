@@ -27,7 +27,7 @@ export class ValidatonsCliente {
             MessageBox.messageError('El campo apellidos debe ser solo letras');
             return false;
         }
-        
+
         if(!form.email) {
           MessageBox.messageError('El campo correo electronico es obligatorio');
           return false;
@@ -55,6 +55,10 @@ export class ValidatonsCliente {
         if(form.telefono && !form.telefono.match(numerico)) {
             MessageBox.messageError('El campo telefono debe ser numerico');
             return false;
+        }
+        if(form.telefono.length != 9) {
+          MessageBox.messageError('El campo telefono debe ser de 9 digitos');
+          return false;
         }
         if(!form.numeroDocumento.match(numerico)) {
             MessageBox.messageError('El campo Número de Documento debe ser numérico');
